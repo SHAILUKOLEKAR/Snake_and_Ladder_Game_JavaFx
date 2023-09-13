@@ -7,15 +7,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 
 public class SnakeLadder extends Application {
 
@@ -75,6 +79,8 @@ public class SnakeLadder extends Application {
 
         diceLabel.setTranslateY(infoLine);
         diceLabel.setTranslateX(180);
+
+       // getPlayerNames();
 
         playerOne = new Player(tileSize, Color.BLACK,"Shailesh");
         playerTwo = new Player(tileSize, Color.WHITE,"Manasi");
@@ -207,6 +213,34 @@ public class SnakeLadder extends Application {
         return root;
     }
 
+    public void getPlayerNames() throws FileNotFoundException {
+        // Create a custom graphic (icon) for the dialog
+        Image customIcon = new Image(new FileInputStream("E:\\ACCIO Material\\Accio Projects\\Snake Ladder\\src\\main\\img.png")); // Replace with the path to your custom icon
+        ImageView iconView = new ImageView(customIcon);
+        iconView.setFitWidth(15);
+        iconView.setFitHeight(15);
+
+        TextInputDialog player1Dialog = new TextInputDialog();
+        player1Dialog.setTitle("Player 1 Name");
+        player1Dialog.setHeaderText("Enter Player 1's Name:");
+        player1Dialog.setGraphic(iconView); // Set the custom icon
+        Optional<String> player1Result = player1Dialog.showAndWait();
+
+        TextInputDialog player2Dialog = new TextInputDialog();
+        player2Dialog.setTitle("Player 2 Name");
+        player2Dialog.setHeaderText("Enter Player 2's Name:");
+        player2Dialog.setGraphic(iconView); // Set the same custom icon
+        Optional<String> player2Result = player2Dialog.showAndWait();
+
+        // Check if the user entered a name and store it in variables
+        String player1Name = player1Result.orElse("Player 1");
+        String player2Name = player2Result.orElse("Player 2");
+
+        // Now, you have the player names in the 'player1Name' and 'player2Name' variables.
+        System.out.println("Player 1's Name: " + player1Name);
+        System.out.println("Player 2's Name: " + player2Name);
+    }
+
     private void checkCollision(int playerOnePos, int playerTwoPos){
         //System.out.println(collided);
        /* System.out.println(plOneX + "**" + plTwoX);
@@ -247,7 +281,12 @@ public class SnakeLadder extends Application {
         Scene scene = new Scene(createContent());
         stage.setTitle("Snake & Ladder");
         stage.setScene(scene);
+
+        Image icon = new Image(new FileInputStream("E:\\ACCIO Material\\Accio Projects\\Snake_and_Ladder_Game_JavaFx\\src\\main\\resources\\snakes-and-ladders.png"));
+        stage.getIcons().add(icon);
+
         stage.show();
+
     }
 
     public static void main(String[] args) {
