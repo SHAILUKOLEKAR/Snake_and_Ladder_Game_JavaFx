@@ -25,7 +25,7 @@ public class SnakeLadder extends Application {
 
     private static Dice dice = new Dice();
     private Player playerOne,playerTwo;
-    private boolean gameStarted = false, playerOneTurn = false,playerTwoTurn=false;
+    private boolean gameStarted = false, playerOneTurn = false,playerTwoTurn=false,collided=false;
 
     private Pane createContent() throws FileNotFoundException {
         Pane root = new Pane();
@@ -77,13 +77,20 @@ public class SnakeLadder extends Application {
         diceLabel.setTranslateX(180);
 
         playerOne = new Player(tileSize, Color.BLACK,"Shailesh");
-        playerTwo = new Player(tileSize-10, Color.WHITE,"Manasi");
+        playerTwo = new Player(tileSize, Color.WHITE,"Manasi");
+
+        //check the collision and distinguish the players
+        /*checkCollision(playerOne.getCoin().getCenterX(),playerOne.getCoin().getCenterY(),
+                playerTwo.getCoin().getCenterX(),playerTwo.getCoin().getCenterY());*/
 
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 gameStarted = true;
                 diceLabel.setText("Game Started!");
+
+                //check the collision and distinguish the players
+                checkCollision(playerOne.getCurrentPosition(),playerTwo.getCurrentPosition());
 
                 startButton.setDisable(true);
 
@@ -96,6 +103,8 @@ public class SnakeLadder extends Application {
                 playerTwoLabel.setText("");
                 playerTwoButton.setDisable(true);
                 playerTwo.startingPositin();
+
+
             }
         });
 
@@ -108,6 +117,9 @@ public class SnakeLadder extends Application {
                     int diceValue = dice.getRolledDiceValue();
                     diceLabel.setText("Dice Value : "+ diceValue);
                     playerOne.movePlayer(diceValue);
+
+                    //check the collision and distinguish the players
+                    checkCollision(playerOne.getCurrentPosition(),playerTwo.getCurrentPosition());
 
                     //winning conditions
                     if(playerOne.isWinner())
@@ -152,6 +164,9 @@ public class SnakeLadder extends Application {
                     diceLabel.setText("Dice Value : "+ diceValue);
                     playerTwo.movePlayer(diceValue);
 
+                    //check the collision and distinguish the players
+                    checkCollision(playerOne.getCurrentPosition(),playerTwo.getCurrentPosition());
+
                     //winning conditions
                     if(playerTwo.isWinner())
                     {
@@ -190,6 +205,39 @@ public class SnakeLadder extends Application {
                 playerTwoLabel,diceLabel,playerOne.getCoin(),playerTwo.getCoin());
 
         return root;
+    }
+
+    private void checkCollision(int playerOnePos, int playerTwoPos){
+        //System.out.println(collided);
+       /* System.out.println(plOneX + "**" + plTwoX);
+        System.out.println(plOneY + "**" + plTwoY);*/
+        //System.out.println(":::::::");
+        if(playerOnePos == playerTwoPos && !collided)
+        {
+            //System.out.println("spread!!!");
+           // playerOne.getCoin().setRotate(moveByPixels);
+            playerOne.getCoin().setCenterX(playerOne.getCoin().getCenterX() + 5);
+            playerOne.getCoin().setCenterY(playerOne.getCoin().getCenterY() + 2);
+
+           // playerTwo.getCoin().setRotate(0);
+            playerTwo.getCoin().setCenterX(playerTwo.getCoin().getCenterX() - 5);
+            playerTwo.getCoin().setCenterY(playerTwo.getCoin().getCenterY() - 2);
+
+            collided = true;
+        }
+        else if(collided)
+        {
+            //System.out.println("Merged!!!");
+            // playerOne.getCoin().setRotate(moveByPixels);
+            playerOne.getCoin().setCenterX(playerOne.getCoin().getCenterX() - 5);
+            playerOne.getCoin().setCenterY(playerOne.getCoin().getCenterY() - 2);
+
+            // playerTwo.getCoin().setRotate(0);
+            playerTwo.getCoin().setCenterX(playerTwo.getCoin().getCenterX() + 5);
+            playerTwo.getCoin().setCenterY(playerTwo.getCoin().getCenterY() + 2);
+
+            collided = false;
+        }
     }
 
     @Override

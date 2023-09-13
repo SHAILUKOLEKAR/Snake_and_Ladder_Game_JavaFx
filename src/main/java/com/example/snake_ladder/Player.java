@@ -14,7 +14,7 @@ public class Player {
    private static Board gameBoard = new Board();
 
     public Player(int tileSize, Color coinColor,String playerName){
-        coin = new Circle(tileSize/2);
+        coin = new Circle(tileSize/3);
         coin.setFill(coinColor);
         currentPosition = 0;//out of board position
         movePlayer(1);
